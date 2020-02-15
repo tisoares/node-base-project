@@ -1,7 +1,6 @@
 import Sequelize, { Model } from 'sequelize'
 import bcrypt from 'bcryptjs'
 
-// Field to protect
 const PROTECTED_ATTRIBUTES = ['password', 'passwordHash']
 
 export default class User extends Model {
@@ -9,11 +8,11 @@ export default class User extends Model {
     // hide protected fields
     let attributes = Object.assign({}, this.get())
     for (let a of PROTECTED_ATTRIBUTES) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (attributes as any)[a] // remove attributes
+      delete attributes[a as keyof object] // remove attributes
     }
     return attributes
   }
+
   public static initialize (sequelize: Sequelize.Sequelize): User {
     User.init({
       usrId: {
